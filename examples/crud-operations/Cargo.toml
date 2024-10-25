@@ -1,0 +1,13 @@
+[package]
+name = "crud-operations"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+futures = "0.3"
+tokio = { version = "1", features = ["full"] }  # Path to the macro crate
+flate2 = "1.0"
+chrono =  "0.4.38"
+rand = "0.8"
+sqlx = { version = "0.8.2", features = ["postgres", "runtime-tokio-rustls", "chrono"] }
+crudx_dbo_generator = { path = "../../crudx_dbo_generator"}

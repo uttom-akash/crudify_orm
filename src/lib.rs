@@ -1,0 +1,1 @@
+pub use crudx_dbo_generator;
