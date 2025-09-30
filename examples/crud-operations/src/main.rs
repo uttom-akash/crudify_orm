@@ -1,5 +1,5 @@
 use chrono::{Duration, NaiveDateTime, Utc};
-use crudx_dbo_generator::Dbo;
+use crudify::Dbo;
 use rand::Rng;
 use sqlx::{FromRow, PgPool};
 
