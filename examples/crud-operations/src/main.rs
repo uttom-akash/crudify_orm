@@ -6,19 +6,14 @@ use sqlx::{FromRow, PgPool};
 #[derive(Debug, Dbo, FromRow)]
 #[dbo(table_name = "partners")]
 struct PartnerDBO {
-    // #[id]
-    // #[paginated_by]
     #[dbo(id, keyset_pagination("id_created_at"))]
     id: i64,
 
-    // #[column_name = ]
     #[dbo(alias = "partner_name")]
     name: String,
 
     partner_type: String,
 
-    // #[default_column]
-    // #[paginated_by]
     #[dbo(default, keyset_pagination("id_created_at"))]
     created_at: NaiveDateTime,
 

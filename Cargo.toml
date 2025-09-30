@@ -1,7 +1,0 @@
-[package]
-name = "crud_x"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-crudx_dbo_generator = { path = "./crudx_dbo_generator" }
