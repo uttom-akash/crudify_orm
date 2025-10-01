@@ -31,6 +31,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let updated_id: i64 = rand::thread_rng().gen_range(10000..=100000);
 
+    /// Auto generated create struct
     let partner_create_dto = PartnerDBOCreate {
         id: id.clone(),
         name: format!("akash-test partner-{}", id),
@@ -39,6 +40,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         enabled: true,
     };
 
+    /// Auto generated create method
     let created_partner = PartnerDBO::create(partner_create_dto, &pool).await?;
 
     println!(
@@ -46,6 +48,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         created_partner
     );
 
+    /// Auto generated update struct
     let partner_update_dto = PartnerDBOUpdate {
         id: Some(updated_id.clone()),
         name: Some(format!("updated partner-{}", updated_id)),
@@ -54,6 +57,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         enabled: Some(false),
     };
 
+    /// Auto generated update method
     let updated_partner =
         PartnerDBO::update_by_id(created_partner.id, partner_update_dto, &pool).await?;
 
@@ -62,6 +66,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         updated_partner
     );
 
+    /// Auto generated get by id method
     let queried_partner = PartnerDBO::get_by_id(updated_partner.id, &pool).await?;
 
     println!(
@@ -69,6 +74,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         queried_partner
     );
 
+    /// Auto generated delete by id method
     match PartnerDBO::delete_by_id(updated_partner.id, &pool).await {
         Ok(_) => println!("########### Good to go: partner deleted ###########"),
         Err(e) => println!("########### ERROR: deleting partner: {} ###########", e),
@@ -109,6 +115,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         };
     }
 
+    /// Auto generated page pagination struct and method
     println!("########### Page Pagination Results: ###########");
     let results: Vec<PartnerDBO> = PartnerDBO::get_paged(
         PagePagination {
@@ -125,6 +132,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("#### FILTER ####");
 
+    /// Auto generated filter struct and method
     let mut filter = PartnerDBOFilter::default();
     filter.id =  Some(80);
     filter.id_condition = Some("<=".to_string());

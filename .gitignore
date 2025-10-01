@@ -1,5 +1,7 @@
 # === Rust / Cargo ===
 /target/
+crudify/target
+examples/crud-operations
 **/*.rs.bk
 
 # === Cargo package manager ===

@@ -1,15 +1,15 @@
 [package]
 name = "crudify"                        # Updated crate name with "plus" for extra features
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Uttom Akash <uttom.akash71@gmail.com>"]
 description = "CrudifyX: A Rust library that automatically generates CRUD operations, DTOs, and pagination helpers for database models."
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/uttom-akash/crudx_plus"
+repository = "https://github.com/uttom-akash/crudify"
 readme = "README.md"
 keywords = ["crud", "sqlx", "orm", "pagination", "dto"]
 categories = ["development-tools", "database"]
-homepage = "https://github.com/uttom-akash/crudx_plus"
+homepage = "https://github.com/uttom-akash/crudify"
 documentation = "https://docs.rs/crudify"
 
 [lib]
