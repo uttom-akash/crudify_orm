@@ -1,6 +1,6 @@
 [package]
 name = "crudify_orm"                        # Updated crate name
-version = "0.1.2"
+version = "0.1.3"
 edition = "2021"
 authors = ["Uttom Akash <uttom.akash71@gmail.com>"]
 description = "CrudifyORM: A Rust library that automatically generates CRUD operations, DTOs, and pagination helpers for database models."

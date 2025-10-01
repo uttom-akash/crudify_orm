@@ -1,11 +1,195 @@
-## crudify-orm
+# crudify-orm
 
--   Generate create, read, update, delete, page_pagination, and keyset_pagination methods automatically.
--   Generate associated dtos automatically to call those operations.
+**crudify-orm** automatically generates CRUD methods, DTOs, and pagination helpers for your database entities using the Entity derive macro.
 
 
-### Examples
+## ✨ Features
 
+- 🆕 **Create:** Automatically generate `create` methods.
+- 🔍 **Read:** Fetch records by primary key.
+- ✏️ **Update:** Auto-generate update methods with partial updates.
+- ❌ **Delete:** Delete records by primary key.
+- 📄 **Page Pagination:** Simple page-based pagination.
+- 🔑 **Keyset Pagination:** Efficient cursor-based pagination for large datasets.
+- 🔎 **Filtering:** Auto-generate filtering methods based on entity fields.
+- 🗂 **DTO Generation:** Automatically generate DTOs for all CRUD operations.
+
+---
+
+## 1️⃣ Define Your Entity
+
+```
+use crudify_orm::Entity;
+use sqlx::FromRow;
+
+#[derive(Debug, Entity, FromRow)]
+#[entity(table_name = "partners")]
+struct PartnerDBO {
+    #[entity(id, keyset_pagination("id_created_at"))]
+    id: i64,
+
+    #[entity(alias = "partner_name")]
+    name: String,
+
+    partner_type: String,
+
+    #[entity(default, keyset_pagination("id_created_at"))]
+    created_at: NaiveDateTime,
+
+    enabled: bool,
+}
+```
+
+### Explanation:
+
+- `#[derive(Entity, FromRow)]` generates all CRUD and pagination methods.
+- `#[entity(table_name = "...")]` specifies the database table.
+- ##### Field attributes:
+
+    - `id` marks the primary key.
+    - `alias` maps struct field names to database column names.
+    - `default` sets default values when creating a new record.
+    - `keyset_pagination` specifies columns used for keyset pagination.
+
+---
+
+## 2️⃣ Create a Record
+```
+let partner_create_dto = PartnerDBOCreate {
+    id: 1,
+    name: "Test Partner".to_string(),
+    partner_type: "test".to_string(),
+    created_at: None,
+    enabled: true,
+};
+
+let created_partner = PartnerDBO::create(partner_create_dto, &pool).await?;
+println!("Created partner: {:?}", created_partner);
+```
+
+### Explanation:
+
+- `PartnerDBOCreate` is auto-generated.
+- `PartnerDBO::create` inserts the record into the database and returns the inserted row.
+
+---
+
+## 3️⃣ Read a Record
+
+```
+let queried_partner = PartnerDBO::get_by_id(created_partner.id, &pool).await?;
+println!("Queried partner: {:?}", queried_partner);
+```
+
+Explanation:
+
+- `get_by_id` fetches a record by its primary key.
+- `Returns Option<PartnerDBO>`.
+
+## 4️⃣ Update a Record
+```
+let partner_update_dto = PartnerDBOUpdate {
+    id: Some(created_partner.id),
+    name: Some("Updated Partner".to_string()),
+    partner_type: None,
+    created_at: None,
+    enabled: Some(false),
+};
+
+let updated_partner = PartnerDBO::update_by_id(created_partner.id, partner_update_dto, &pool).await?;
+println!("Updated partner: {:?}", updated_partner);
+```
+
+### Explanation:
+
+- `PartnerDBOUpdate` is auto-generated and allows partial updates.
+- Only fields set to `Some(value)` will be updated in the database.
+
+---
+
+## 5️⃣ Delete a Record
+```
+PartnerDBO::delete_by_id(updated_partner.id, &pool).await?;
+println!("Partner deleted successfully");
+```
+
+### Explanation:
+
+- `delete_by_id` deletes a record using its primary key.
+
+
+## 6️⃣ Page Pagination
+```
+let page_results = PartnerDBO::get_paged(
+    PagePagination { page: 1, page_size: 5 },
+    &pool,
+).await?;
+println!("Page results: {:?}", page_results);
+```
+
+### Explanation:
+
+- Simple pagination based on page and page_size.
+
+- Returns a `Vec<PartnerDBO>` for the requested page.
+
+---
+
+## 7️⃣ Keyset Pagination
+
+```
+let mut id_cursor: i64 = i64::MAX;
+let mut created_at = Utc::now().naive_utc();
+let limit: i64 = 5;
+
+loop {
+    let results = PartnerDBO::paginate_dby_id_created_at(
+        PaginationCursorIdCreatedAt {
+            id: id_cursor,
+            created_at,
+            limit,
+            condition: "<".to_string(),
+            order_by: "desc".to_string(),
+        },
+        &pool,
+    ).await?;
+
+    if results.is_empty() { break; }
+
+    println!("Keyset results: {:?}", results);
+
+    // Update cursor for next iteration
+    let last = results.last().unwrap();
+    id_cursor = last.id;
+    created_at = last.created_at;
+}
+```
+
+### Explanation:
+
+- **Keyset pagination** is more efficient for large datasets.
+- Uses `id` and `created_at` as cursors to fetch the next set of rows.
+
+## 8️⃣ Filter Records
+```
+let mut filter = PartnerDBOFilter::default();
+filter.enabled = Some(false);
+filter.enabled_condition = Some("=".to_string());
+filter.id = Some(100);
+filter.id_condition = Some("<=".to_string());
+
+let filtered_results = PartnerDBO::filter(filter, &pool).await?;
+println!("Filtered results: {:?}", filtered_results);
+```
+
+### Explanation:
+
+- `PartnerDBOFilter` allows filtering using field conditions.
+- Conditions can include `=, !=, <, >, <=, >=`.
+
+
+
+## Full Example
 ```
 
 use chrono::{Duration, NaiveDateTime, Utc};
@@ -159,10 +343,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-
-
-
 ```
 
-### Note
- This crate currently has a hard dependency on sqlx. All generated CRUD methods, DTOs, and pagination helpers rely on sqlx::PgPool and sqlx::FromRow. Future versions may support other database backends.
+## 📝 Note 
+This crate currently has a hard dependency on sqlx. All generated CRUD methods, DTOs, and pagination helpers rely on sqlx::PgPool and sqlx::FromRow. Future versions may support other database backends.

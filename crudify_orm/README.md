@@ -46,11 +46,10 @@ struct PartnerDBO {
 - `#[entity(table_name = "...")]` specifies the database table.
 - ##### Field attributes:
 
-    - id marks the primary key.
-    - alias maps struct field names to database column names.
-    - default sets default values when creating a new record.
-
-keyset_pagination specifies columns used for keyset pagination.
+    - `id` marks the primary key.
+    - `alias` maps struct field names to database column names.
+    - `default` sets default values when creating a new record.
+    - `keyset_pagination` specifies columns used for keyset pagination.
 
 ---
 
@@ -104,7 +103,7 @@ println!("Updated partner: {:?}", updated_partner);
 ### Explanation:
 
 - `PartnerDBOUpdate` is auto-generated and allows partial updates.
-- Only fields set to Some(value) will be updated in the database.
+- Only fields set to `Some(value)` will be updated in the database.
 
 ---
 
@@ -168,8 +167,8 @@ loop {
 
 ### Explanation:
 
-- Keyset pagination is more efficient for large datasets.
-- Uses id and created_at as cursors to fetch the next set of rows.
+- **Keyset pagination** is more efficient for large datasets.
+- Uses `id` and `created_at` as cursors to fetch the next set of rows.
 
 ## 8️⃣ Filter Records
 ```
