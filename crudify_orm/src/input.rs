@@ -6,7 +6,7 @@ use syn::{parse::Parse, Attribute, Ident, ItemStruct, LitStr, Meta, MetaList, Ty
 
 use crate::{
     constant::{
-        COLUMN_ALIAS_ATTRIBUTE, DBO_ATTRIBUTE, DEFAULT_COLUMN_ATTRIBUTE, ID_ATTRIBUTE,
+        COLUMN_ALIAS_ATTRIBUTE, ENTITY_ATTRIBUTE, DEFAULT_COLUMN_ATTRIBUTE, ID_ATTRIBUTE,
         KEYSET_PAGINATION_ATTRIBUTE, TABLE_NAME_ATTRIBUTE,
     },
     utils::{create_ident, to_pascal_case},
@@ -22,7 +22,7 @@ impl DboAttributeMetadata {
         match parsed_struct
             .attrs
             .iter()
-            .find(|attr| attr.path().is_ident(DBO_ATTRIBUTE))
+            .find(|attr| attr.path().is_ident(ENTITY_ATTRIBUTE))
         {
             Some(Attribute {
                 meta: Meta::List(MetaList { tokens, .. }),
@@ -159,7 +159,7 @@ impl FieldDefinition {
         match field
             .attrs
             .iter()
-            .find(|attr| attr.path().is_ident(DBO_ATTRIBUTE))
+            .find(|attr| attr.path().is_ident(ENTITY_ATTRIBUTE))
         {
             Some(Attribute {
                 meta: Meta::List(MetaList { tokens, .. }),

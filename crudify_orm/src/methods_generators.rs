@@ -495,7 +495,7 @@ fn generate_filter_clauses(
         filter_clauses.push(quote! {
             if payload.#field_ident.is_some() && payload.#condition.is_some() {
                 if and_sep {
-                    query_builder.push(" AND");
+                    query_builder.push(" AND ");
                 }
                 
                 query_builder.push(#column_name);
