@@ -3,7 +3,7 @@ use crudify_orm::Entity;
 use rand::Rng;
 use sqlx::{FromRow, PgPool};
 
-#[derive(Debug,Entity, FromRow)]
+#[derive(Debug, Entity, FromRow)]
 #[entity(table_name = "partners")]
 struct PartnerEntity {
     #[entity(id, keyset_pagination("id_created_at"))]

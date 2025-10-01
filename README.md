@@ -163,3 +163,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 
 ```
+
+### Note
+ This crate currently has a hard dependency on sqlx. All generated CRUD methods, DTOs, and pagination helpers rely on sqlx::PgPool and sqlx::FromRow. Future versions may support other database backends.
