@@ -1,4 +1,4 @@
-pub const DBO_ATTRIBUTE: &str = "dbo";
+pub const ENTITY_ATTRIBUTE: &str = "entity";
 pub const ID_ATTRIBUTE: &str = "id";
 pub const DEFAULT_COLUMN_ATTRIBUTE: &str = "default";
 pub const COLUMN_ALIAS_ATTRIBUTE: &str = "alias";

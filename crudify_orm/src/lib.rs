@@ -16,8 +16,8 @@ mod input;
 mod methods_generators;
 mod utils;
 
-#[proc_macro_derive(Dbo, attributes(dbo))]
-pub fn dbo(input: TokenStream) -> TokenStream {
+#[proc_macro_derive(Entity, attributes(entity))]
+pub fn crudify_entity(input: TokenStream) -> TokenStream {
     let object_definitions = match ObjectDefinition::parse(input) {
         Ok(definitions) => definitions,
         Err(e) => {

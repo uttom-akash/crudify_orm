@@ -1,25 +1,20 @@
 use chrono::{Duration, NaiveDateTime, Utc};
-use crudx_dbo_generator::Dbo;
+use crudify_orm::Entity;
 use rand::Rng;
 use sqlx::{FromRow, PgPool};
 
-#[derive(Debug, Dbo, FromRow)]
-#[dbo(table_name = "partners")]
-struct PartnerDBO {
-    // #[id]
-    // #[paginated_by]
-    #[dbo(id, keyset_pagination("id_created_at"))]
+#[derive(Debug, Entity, FromRow)]
+#[entity(table_name = "partners")]
+struct PartnerEntity {
+    #[entity(id, keyset_pagination("id_created_at"))]
     id: i64,
 
-    // #[column_name = ]
-    #[dbo(alias = "partner_name")]
+    #[entity(alias = "partner_name")]
     name: String,
 
     partner_type: String,
 
-    // #[default_column]
-    // #[paginated_by]
-    #[dbo(default, keyset_pagination("id_created_at"))]
+    #[entity(default, keyset_pagination("id_created_at"))]
     created_at: NaiveDateTime,
 
     enabled: bool,
@@ -36,7 +31,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let updated_id: i64 = rand::thread_rng().gen_range(10000..=100000);
 
-    let partner_create_dto = PartnerDBOCreate {
+    /// Auto generated create struct
+    let partner_create_dto = PartnerEntityCreate {
         id: id.clone(),
         name: format!("akash-test partner-{}", id),
         partner_type: "test".to_string(),
@@ -44,14 +40,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         enabled: true,
     };
 
-    let created_partner = PartnerDBO::create(partner_create_dto, &pool).await?;
+    /// Auto generated create method
+    let created_partner = PartnerEntity::create(partner_create_dto, &pool).await?;
 
     println!(
         "########### created partner: {:?} ###########",
         created_partner
     );
 
-    let partner_update_dto = PartnerDBOUpdate {
+    /// Auto generated update struct
+    let partner_update_dto = PartnerEntityUpdate {
         id: Some(updated_id.clone()),
         name: Some(format!("updated partner-{}", updated_id)),
         partner_type: None,
@@ -59,31 +57,25 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         enabled: Some(false),
     };
 
+    /// Auto generated update method
     let updated_partner =
-        PartnerDBO::update_by_id(created_partner.id, partner_update_dto, &pool).await?;
+        PartnerEntity::update_by_id(created_partner.id, partner_update_dto, &pool).await?;
 
     println!(
         "########### updated partner: {:?} ###########",
         updated_partner
     );
 
-    let queried_partner = PartnerDBO::get_by_id(updated_partner.id, &pool).await?;
+    /// Auto generated get by id method
+    let queried_partner = PartnerEntity::get_by_id(updated_partner.id, &pool).await?;
 
     println!(
         "########### queried partner: {:?} ###########",
         queried_partner
     );
 
-    match PartnerDBO::delete_by_id(updated_partner.id, &pool).await {
-        Ok(_) => println!("########### Good to go: partner deleted ###########"),
-        Err(e) => println!("########### ERROR: deleting partner: {} ###########", e),
-    }
 
-    match PartnerDBO::get_by_id(updated_partner.id, &pool).await {
-        Ok(Some(_)) => println!("########### ERROR: partner found ###########"),
-        _ => println!("########### Good to go: partner should not be found ###########"),
-    }
-
+    /// Auto generated pagination
     println!("########### Pagination Results: ###########");
     let now = Utc::now().naive_utc();
     let mut created_at = now - Duration::hours(12);
@@ -91,7 +83,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let limit: i64 = 6;
 
     loop {
-        let results: Vec<PartnerDBO> = PartnerDBO::paginate_dby_id_created_at(
+        let results: Vec<PartnerEntity> = PartnerEntity::paginate_dby_id_created_at(
             PaginationCursorIdCreatedAt {
                 id,
                 created_at,
@@ -114,8 +106,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         };
     }
 
+    /// Auto generated page pagination struct and method
     println!("########### Page Pagination Results: ###########");
-    let results: Vec<PartnerDBO> = PartnerDBO::get_paged(
+    let results: Vec<PartnerEntity> = PartnerEntity::get_paged(
         PagePagination {
             page: 1,
             page_size: 6,
@@ -130,13 +123,28 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("#### FILTER ####");
 
-    let mut filter = PartnerDBOFilter::default();
-    filter.id =  Some(80);
+    /// Auto generated filter struct and method
+    let mut filter = PartnerEntityFilter::default();
+    filter.id =  Some(id);
     filter.id_condition = Some("<=".to_string());
+    filter.enabled = Some(false);
+    filter.enabled_condition = Some("=".to_string());
 
-    let results = PartnerDBO::filter(filter, &pool,).await?;
+    let results = PartnerEntity::filter(filter, &pool,).await?;
     
     println!("###### {:?} #####", results);
+
+
+    /// Auto generated delete by id method
+    match PartnerEntity::delete_by_id(updated_partner.id, &pool).await {
+        Ok(_) => println!("########### Good to go: partner deleted ###########"),
+        Err(e) => println!("########### ERROR: deleting partner: {} ###########", e),
+    }
+
+    match PartnerEntity::get_by_id(updated_partner.id, &pool).await {
+        Ok(Some(_)) => println!("########### ERROR: partner found ###########"),
+        _ => println!("########### Good to go: partner should not be found ###########"),
+    }
 
     Ok(())
 }
