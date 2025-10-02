@@ -2,7 +2,7 @@
 /target/
 crudify_orm/target
 crudify_orm_tests/target
-examples/crud-operations
+examples/crud-operations/target
 **/*.rs.bk
 
 # === Cargo package manager ===

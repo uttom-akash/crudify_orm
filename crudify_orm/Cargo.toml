@@ -10,7 +10,7 @@ readme = "../README.md"
 keywords = ["crud", "sqlx", "orm", "pagination", "dto"]
 categories = ["development-tools", "database"]
 homepage = "https://github.com/uttom-akash/crudify_orm"
-documentation = "https://docs.rs/crudify-orm"
+documentation = "https://docs.rs/crudify_orm"
 
 
 [lib]

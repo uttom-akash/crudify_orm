@@ -40,7 +40,7 @@ use sqlx::FromRow;
 
 #[derive(Debug, Entity, FromRow)]
 #[entity(table_name = "partners")]
-struct PartnerDBO {
+struct PartnerEntity {
     #[entity(id, keyset_pagination("id_created_at"))]
     id: i64,
 
@@ -71,7 +71,7 @@ struct PartnerDBO {
 
 ## 2️⃣ Create a Record
 ```
-let partner_create_dto = PartnerDBOCreate {
+let partner_create_dto = PartnerEntityCreate {
     id: 1,
     name: "Test Partner".to_string(),
     partner_type: "test".to_string(),
@@ -79,32 +79,32 @@ let partner_create_dto = PartnerDBOCreate {
     enabled: true,
 };
 
-let created_partner = PartnerDBO::create(partner_create_dto, &pool).await?;
+let created_partner = PartnerEntity::create(partner_create_dto, &pool).await?;
 println!("Created partner: {:?}", created_partner);
 ```
 
 ### Explanation:
 
-- `PartnerDBOCreate` is auto-generated.
-- `PartnerDBO::create` inserts the record into the database and returns the inserted row.
+- `PartnerEntityCreate` is auto-generated.
+- `PartnerEntity::create` inserts the record into the database and returns the inserted row.
 
 ---
 
 ## 3️⃣ Read a Record
 
 ```
-let queried_partner = PartnerDBO::get_by_id(created_partner.id, &pool).await?;
+let queried_partner = PartnerEntity::get_by_id(created_partner.id, &pool).await?;
 println!("Queried partner: {:?}", queried_partner);
 ```
 
 Explanation:
 
 - `get_by_id` fetches a record by its primary key.
-- `Returns Option<PartnerDBO>`.
+- `Returns Option<PartnerEntity>`.
 
 ## 4️⃣ Update a Record
 ```
-let partner_update_dto = PartnerDBOUpdate {
+let partner_update_dto = PartnerEntityUpdate {
     id: Some(created_partner.id),
     name: Some("Updated Partner".to_string()),
     partner_type: None,
@@ -112,20 +112,20 @@ let partner_update_dto = PartnerDBOUpdate {
     enabled: Some(false),
 };
 
-let updated_partner = PartnerDBO::update_by_id(created_partner.id, partner_update_dto, &pool).await?;
+let updated_partner = PartnerEntity::update_by_id(created_partner.id, partner_update_dto, &pool).await?;
 println!("Updated partner: {:?}", updated_partner);
 ```
 
 ### Explanation:
 
-- `PartnerDBOUpdate` is auto-generated and allows partial updates.
+- `PartnerEntityUpdate` is auto-generated and allows partial updates.
 - Only fields set to `Some(value)` will be updated in the database.
 
 ---
 
 ## 5️⃣ Delete a Record
 ```
-PartnerDBO::delete_by_id(updated_partner.id, &pool).await?;
+PartnerEntity::delete_by_id(updated_partner.id, &pool).await?;
 println!("Partner deleted successfully");
 ```
 
@@ -136,7 +136,7 @@ println!("Partner deleted successfully");
 
 ## 6️⃣ Page Pagination
 ```
-let page_results = PartnerDBO::get_paged(
+let page_results = PartnerEntity::get_paged(
     PagePagination { page: 1, page_size: 5 },
     &pool,
 ).await?;
@@ -147,7 +147,7 @@ println!("Page results: {:?}", page_results);
 
 - Simple pagination based on page and page_size.
 
-- Returns a `Vec<PartnerDBO>` for the requested page.
+- Returns a `Vec<PartnerEntity>` for the requested page.
 
 ---
 
@@ -159,7 +159,7 @@ let mut created_at = Utc::now().naive_utc();
 let limit: i64 = 5;
 
 loop {
-    let results = PartnerDBO::paginate_dby_id_created_at(
+    let results = PartnerEntity::paginate_dby_id_created_at(
         PaginationCursorIdCreatedAt {
             id: id_cursor,
             created_at,
@@ -188,19 +188,19 @@ loop {
 
 ## 8️⃣ Filter Records
 ```
-let mut filter = PartnerDBOFilter::default();
+let mut filter = PartnerEntityFilter::default();
 filter.enabled = Some(false);
 filter.enabled_condition = Some("=".to_string());
 filter.id = Some(100);
 filter.id_condition = Some("<=".to_string());
 
-let filtered_results = PartnerDBO::filter(filter, &pool).await?;
+let filtered_results = PartnerEntity::filter(filter, &pool).await?;
 println!("Filtered results: {:?}", filtered_results);
 ```
 
 ### Explanation:
 
-- `PartnerDBOFilter` allows filtering using field conditions.
+- `PartnerEntityFilter` allows filtering using field conditions.
 - Conditions can include `=, !=, <, >, <=, >=`.
 
 
@@ -215,7 +215,7 @@ use sqlx::{FromRow, PgPool};
 
 #[derive(Debug,Entity, FromRow)]
 #[entity(table_name = "partners")]
-struct PartnerDBO {
+struct PartnerEntity {
     #[entity(id, keyset_pagination("id_created_at"))]
     id: i64,
 
@@ -242,7 +242,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let updated_id: i64 = rand::thread_rng().gen_range(10000..=100000);
 
     /// Auto generated create struct
-    let partner_create_dto = PartnerDBOCreate {
+    let partner_create_dto = PartnerEntityCreate {
         id: id.clone(),
         name: format!("akash-test partner-{}", id),
         partner_type: "test".to_string(),
@@ -251,7 +251,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
 
     /// Auto generated create method
-    let created_partner = PartnerDBO::create(partner_create_dto, &pool).await?;
+    let created_partner = PartnerEntity::create(partner_create_dto, &pool).await?;
 
     println!(
         "########### created partner: {:?} ###########",
@@ -259,7 +259,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     );
 
     /// Auto generated update struct
-    let partner_update_dto = PartnerDBOUpdate {
+    let partner_update_dto = PartnerEntityUpdate {
         id: Some(updated_id.clone()),
         name: Some(format!("updated partner-{}", updated_id)),
         partner_type: None,
@@ -269,7 +269,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     /// Auto generated update method
     let updated_partner =
-        PartnerDBO::update_by_id(created_partner.id, partner_update_dto, &pool).await?;
+        PartnerEntity::update_by_id(created_partner.id, partner_update_dto, &pool).await?;
 
     println!(
         "########### updated partner: {:?} ###########",
@@ -277,7 +277,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     );
 
     /// Auto generated get by id method
-    let queried_partner = PartnerDBO::get_by_id(updated_partner.id, &pool).await?;
+    let queried_partner = PartnerEntity::get_by_id(updated_partner.id, &pool).await?;
 
     println!(
         "########### queried partner: {:?} ###########",
@@ -293,7 +293,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let limit: i64 = 6;
 
     loop {
-        let results: Vec<PartnerDBO> = PartnerDBO::paginate_dby_id_created_at(
+        let results: Vec<PartnerEntity> = PartnerEntity::paginate_dby_id_created_at(
             PaginationCursorIdCreatedAt {
                 id,
                 created_at,
@@ -318,7 +318,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     /// Auto generated page pagination struct and method
     println!("########### Page Pagination Results: ###########");
-    let results: Vec<PartnerDBO> = PartnerDBO::get_paged(
+    let results: Vec<PartnerEntity> = PartnerEntity::get_paged(
         PagePagination {
             page: 1,
             page_size: 6,
@@ -334,24 +334,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("#### FILTER ####");
 
     /// Auto generated filter struct and method
-    let mut filter = PartnerDBOFilter::default();
+    let mut filter = PartnerEntityFilter::default();
     filter.id =  Some(id);
     filter.id_condition = Some("<=".to_string());
     filter.enabled = Some(false);
     filter.enabled_condition = Some("=".to_string());
 
-    let results = PartnerDBO::filter(filter, &pool,).await?;
+    let results = PartnerEntity::filter(filter, &pool,).await?;
     
     println!("###### {:?} #####", results);
 
 
     /// Auto generated delete by id method
-    match PartnerDBO::delete_by_id(updated_partner.id, &pool).await {
+    match PartnerEntity::delete_by_id(updated_partner.id, &pool).await {
         Ok(_) => println!("########### Good to go: partner deleted ###########"),
         Err(e) => println!("########### ERROR: deleting partner: {} ###########", e),
     }
 
-    match PartnerDBO::get_by_id(updated_partner.id, &pool).await {
+    match PartnerEntity::get_by_id(updated_partner.id, &pool).await {
         Ok(Some(_)) => println!("########### ERROR: partner found ###########"),
         _ => println!("########### Good to go: partner should not be found ###########"),
     }
