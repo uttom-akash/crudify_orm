@@ -30,7 +30,7 @@ DATABASE_URL=postgres://user:password@localhost:5432/your_database
 ```
 
 you will find working examples here: 
-![demo project](https://github.com/uttom-akash/crudify_orm/tree/feat/crux-x/examples/crud-operations)
+[demo project](https://github.com/uttom-akash/crudify_orm/tree/feat/crux-x/examples/crud-operations)
 
 ## 1️⃣ Define Your Entity
 
