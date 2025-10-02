@@ -2,6 +2,7 @@
 
 **crudify-orm** automatically generates CRUD methods, DTOs, and pagination helpers for your database entities using the Entity derive macro.
 
+Available as a Rust crate: [crudify_orm on crates.io](https://crates.io/crates/crudify_orm)
 
 ## ✨ Features
 
