@@ -1,6 +1,7 @@
 # === Rust / Cargo ===
 /target/
 crudify_orm/target
+crudify_orm_tests/target
 examples/crud-operations
 **/*.rs.bk
 

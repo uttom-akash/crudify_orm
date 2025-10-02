@@ -16,6 +16,22 @@
 
 ---
 
+## 📝 Note 
+This crate currently has a hard dependency on sqlx:
+```
+sqlx = { version = "0.8.2", features = ["postgres", "runtime-tokio-rustls", "chrono"] }
+```
+Future versions may support other database backends.
+
+⚠️ Important:
+Since SQLx connects to the database at compile time for query validation, you must provide a valid connection string in your .env file:
+```
+DATABASE_URL=postgres://user:password@localhost:5432/your_database
+```
+
+you will find working examples here: 
+![demo project](https://github.com/uttom-akash/crudify_orm/tree/feat/crux-x/examples/crud-operations)
+
 ## 1️⃣ Define Your Entity
 
 ```
@@ -345,5 +361,3 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ```
 
-## 📝 Note 
-This crate currently has a hard dependency on sqlx. All generated CRUD methods, DTOs, and pagination helpers rely on sqlx::PgPool and sqlx::FromRow. Future versions may support other database backends.
