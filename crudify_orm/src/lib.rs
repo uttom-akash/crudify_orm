@@ -33,7 +33,6 @@ pub fn crudify_entity(input: TokenStream) -> TokenStream {
 
     let filter_dto = generate_filter_dto(&object_definitions);
     
-    println!("{:?}", filter_dto.to_string());
     // Generate CRUD operations
     let struct_ident = object_definitions.get_struct_ident();
 

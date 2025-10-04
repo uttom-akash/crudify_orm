@@ -2,7 +2,8 @@
 
 **crudify-orm** automatically generates CRUD methods, DTOs, and pagination helpers for your database entities using the Entity derive macro.
 
-Available as a Rust crate: [crates.io/crates/crudify_orm](https://crates.io/crates/crudify_orm)
+Available as a Rust crate: [crudify_orm on crates.io](https://crates.io/crates/crudify_orm)
+
 
 ## ✨ Features
 
@@ -18,7 +19,7 @@ Available as a Rust crate: [crates.io/crates/crudify_orm](https://crates.io/crat
 ---
 
 ## 📝 Note 
-This crate currently has a hard dependency on sqlx:
+This crate currently only supports PostgreSQL now and has a hard dependency on sqlx:
 ```
 sqlx = { version = "0.8.2", features = ["postgres", "runtime-tokio-rustls", "chrono"] }
 ```
@@ -30,8 +31,8 @@ Since SQLx connects to the database at compile time for query validation, you mu
 DATABASE_URL=postgres://user:password@localhost:5432/your_database
 ```
 
-you will find working examples here: 
-[demo project](https://github.com/uttom-akash/crudify_orm/tree/feat/crux-x/examples/crud-operations)
+You will find working examples here:
+👉 [demo project](https://github.com/uttom-akash/crudify_orm/tree/feat/crux-x/examples/crud-operations)
 
 ## 1️⃣ Define Your Entity
 
