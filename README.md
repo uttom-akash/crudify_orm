@@ -4,6 +4,7 @@
 
 Available as a Rust crate: [crudify_orm on crates.io](https://crates.io/crates/crudify_orm)
 
+
 ## ✨ Features
 
 - 🆕 **Create:** Automatically generate `create` methods.
